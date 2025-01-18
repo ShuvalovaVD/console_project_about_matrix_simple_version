@@ -5,6 +5,40 @@
 строку, и тогда всё сломается. Но работа с ошибками и исключениями усложнила бы программу.
 """
 
+def get_one_matrix():
+    """Получает матрицу от пользователя."""
+    print("Введите размеры матрицы:")
+    rows = int(input("Количество строк: "))
+    columns = int(input("Количество столбцов: "))
+    print(f"Введите матрицу {rows} x {columns}:")
+    matrix = [[int(el) for el in input().split()] for i in range(rows)]
+    return rows, columns, matrix
+
+
+def get_two_matrices():
+    """Получает две матрицы от пользователя."""
+    print("Введите размеры первой матрицы:")
+    rows_1 = int(input("Количество строк: "))
+    columns_1 = int(input("Количество столбцов: "))
+    print(f"Введите первую матрицу {rows_1} x {columns_1}:")
+    matrix_1 = [[int(el) for el in input().split()] for i in range(rows_1)]
+    print("Введите размеры второй матрицы:")
+    rows_2 = int(input("Количество строк: "))
+    columns_2 = int(input("Количество столбцов: "))
+    print(f"Введите вторую матрицу {rows_2} x {columns_2}:")
+    matrix_2 = [[int(el) for el in input().split()] for i in range(rows_2)]
+    return rows_1, columns_1, matrix_1, rows_2, columns_2, matrix_2
+
+
+def show_matrix_result(rows_result, columns_result, matrix_result):
+    """Выводит итоговую матрицу пользователю."""
+    print(f"Итоговая матрица {rows_result} x {columns_result}:")
+    for i in range(rows_result):
+        for j in range(columns_result):
+            print(f"{matrix_result[i][j]:5d}", end="")
+        print()
+
+
 def multiply_matrix_by_number(rows, columns, matrix, number):
     """Умножает матрицу на число."""
     matrix_result = [[matrix[i][j] * number for j in range(columns)] for i in range(rows)]
@@ -66,7 +100,7 @@ def multiply_two_matrices(rows_1, columns_1, matrix_1, rows_2, columns_2, matrix
 
 
 def main():
-    """Главная функция программы: вызывает другие функции."""
+    """Главная функция программы, вызывает другие функции из других модулей."""
     print("Данная программа реализует операции над матрицами")  # стартовое сообщение выведем один раз
     while True:  # программа будет работать много раз, до тех пор, пока пользователь не выберет опцию "выход"
         # программма реализует много действий, предлагаем пользователю выбрать одну опцию
@@ -80,38 +114,18 @@ def main():
         print("7. Завершение программы")
         answer = input()  # получаем ответ от пользователя
         if answer == "1":
-            print("Введите размеры матрицы:")
-            rows = int(input("Количество строк: "))
-            columns = int(input("Количество столбцов: "))
-            print(f"Введите матрицу {rows} x {columns}:")
-            matrix = [[int(el) for el in input().split()] for i in range(rows)]
+            rows, columns, matrix = get_one_matrix()
             number = int(input("Введите число: "))
             rows_result, columns_result = rows, columns
             matrix_result = multiply_matrix_by_number(rows, columns, matrix, number)
-            print(f"Итоговая матрица {rows_result} x {columns_result}:")
-            for i in range(rows_result):
-                for j in range(columns_result):
-                    print(f"{matrix_result[i][j]:5d}", end="")
-                print()
+            show_matrix_result(rows_result, columns_result, matrix_result)
         elif answer == "2":
-            print("Введите размеры матрицы:")
-            rows = int(input("Количество строк: "))
-            columns = int(input("Количество столбцов: "))
-            print(f"Введите матрицу {rows} x {columns}:")
-            matrix = [[int(el) for el in input().split()] for i in range(rows)]
+            rows, columns, matrix = get_one_matrix()
             rows_result, columns_result = columns, rows  # у транспонированной матрицы поменяются размеры наоборот
             matrix_result = transpose_matrix(rows, columns, matrix)
-            print(f"Итоговая матрица {rows_result} x {columns_result}:")
-            for i in range(rows_result):
-                for j in range(columns_result):
-                    print(f"{matrix_result[i][j]:5d}", end="")
-                print()
+            show_matrix_result(rows_result, columns_result, matrix_result)
         elif answer == "3":
-            print("Введите размеры матрицы:")
-            rows = int(input("Количество строк: "))
-            columns = int(input("Количество столбцов: "))
-            print(f"Введите матрицу {rows} x {columns}:")
-            matrix = [[int(el) for el in input().split()] for i in range(rows)]
+            rows, columns, matrix = get_one_matrix()
             flag_result = check_symmetry_of_matrix(rows, columns, matrix)
             # flag_result - переменная-флаг: True, если матрица симметричная и False, если нет
             if flag_result:  # if flag_result == True:
@@ -119,64 +133,25 @@ def main():
             else:
                 print("Матрица несимметричная")
         elif answer == "4":
-            print("Введите размеры первой матрицы:")
-            rows_1 = int(input("Количество строк: "))
-            columns_1 = int(input("Количество столбцов: "))
-            print(f"Введите первую матрицу {rows_1} x {columns_1}:")
-            matrix_1 = [[int(el) for el in input().split()] for i in range(rows_1)]
-            print("Введите размеры второй матрицы:")
-            rows_2 = int(input("Количество строк: "))
-            columns_2 = int(input("Количество столбцов: "))
-            print(f"Введите вторую матрицу {rows_2} x {columns_2}:")
-            matrix_2 = [[int(el) for el in input().split()] for i in range(rows_2)]
+            rows_1, columns_1, matrix_1, rows_2, columns_2, matrix_2 = get_two_matrices()
             # предполагается, что размеры у матриц одинаковые: только тогда сложение матриц определено
             rows_result, columns_result = rows_1, columns_1
             matrix_result = add_two_matrices(rows_result, columns_result, matrix_1, matrix_2)
-            print(f"Итоговая матрица {rows_result} x {columns_result}:")
-            for i in range(rows_result):
-                for j in range(columns_result):
-                    print(f"{matrix_result[i][j]:5d}", end="")
-                print()
+            show_matrix_result(rows_result, columns_result, matrix_result)
         elif answer == "5":
-            print("Введите размеры первой матрицы:")
-            rows_1 = int(input("Количество строк: "))
-            columns_1 = int(input("Количество столбцов: "))
-            print(f"Введите первую матрицу {rows_1} x {columns_1}:")
-            matrix_1 = [[int(el) for el in input().split()] for i in range(rows_1)]
-            print("Введите размеры второй матрицы:")
-            rows_2 = int(input("Количество строк: "))
-            columns_2 = int(input("Количество столбцов: "))
-            print(f"Введите вторую матрицу {rows_2} x {columns_2}:")
-            matrix_2 = [[int(el) for el in input().split()] for i in range(rows_2)]
+            rows_1, columns_1, matrix_1, rows_2, columns_2, matrix_2 = get_two_matrices()
             # предполагается, что размеры у матриц одинаковые: только тогда вычитание матриц определено
             rows_result, columns_result = rows_1, columns_1
             matrix_result = subtract_two_matrices(rows_result, columns_result, matrix_1, matrix_2)
-            print(f"Итоговая матрица {rows_result} x {columns_result}:")
-            for i in range(rows_result):
-                for j in range(columns_result):
-                    print(f"{matrix_result[i][j]:5d}", end="")
-                print()
+            show_matrix_result(rows_result, columns_result, matrix_result)
         elif answer == "6":
-            print("Введите размеры первой матрицы:")
-            rows_1 = int(input("Количество строк: "))
-            columns_1 = int(input("Количество столбцов: "))
-            print(f"Введите первую матрицу {rows_1} x {columns_1}:")
-            matrix_1 = [[int(el) for el in input().split()] for i in range(rows_1)]
-            print("Введите размеры второй матрицы:")
-            rows_2 = int(input("Количество строк: "))
-            columns_2 = int(input("Количество столбцов: "))
-            print(f"Введите вторую матрицу {rows_2} x {columns_2}:")
-            matrix_2 = [[int(el) for el in input().split()] for i in range(rows_2)]
+            rows_1, columns_1, matrix_1, rows_2, columns_2, matrix_2 = get_two_matrices()
             # предполагается, что количество столбцов первой матрицы равно числу строк второй матрицы:
             # только тогда умножение первой матрицы на вторую матрицу определено
             rows_result, columns_result = rows_1, columns_2
             # при умножении первой матрицы на вторую матрицу итоговая матрица будет иметь размеры rows_1 x columns_2
             matrix_result = multiply_two_matrices(rows_1, columns_1, matrix_1, rows_2, columns_2, matrix_2)
-            print(f"Итоговая матрица {rows_result} x {columns_result}:")
-            for i in range(rows_result):
-                for j in range(columns_result):
-                    print(f"{matrix_result[i][j]:5d}", end="")
-                print()
+            show_matrix_result(rows_result, columns_result, matrix_result)
         elif answer == "7":
             break  # выход из вечного цикла
         print("Желаете продолжить? Введите +, если да, иначе что-либо другое:")  # сообщение о продолжении работы
