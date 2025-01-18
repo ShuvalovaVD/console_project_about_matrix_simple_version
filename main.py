@@ -115,7 +115,7 @@ def main():
         answer = input()  # получаем ответ от пользователя
         if answer == "1":
             rows, columns, matrix = get_one_matrix()
-            number = int(input("Введите число: "))
+            number = int(input("Введите целое число: "))
             rows_result, columns_result = rows, columns
             matrix_result = multiply_matrix_by_number(rows, columns, matrix, number)
             show_matrix_result(rows_result, columns_result, matrix_result)
